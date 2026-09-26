@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robot Arm Viewer</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #0f1419; color: #e7ecf1; font-family: system-ui, sans-serif; }
+    #bar {
+      display: flex; align-items: center; gap: 12px; padding: 8px 14px;
+      background: #1a2332; border-bottom: 1px solid #2a3548; font-size: 13px;
+    }
+    #bar .badge {
+      padding: 2px 8px; border-radius: 999px; background: #243044; font-size: 11px;
+    }
+    #bar .badge.ok { background: #1e4d3a; }
+    #canvas-wrap { position: absolute; inset: 40px 0 0 0; }
+    canvas { display: block; width: 100%; height: 100%; }
+    #err { color: #f88; padding: 12px; display: none; }
+  </style>
+</head>
+<body>
+  <div id="bar">
+    <strong>node-red-contrib-robot-arm</strong>
+    <span class="badge" id="src">source: —</span>
+    <span class="badge" id="rb">ros: —</span>
+    <span class="badge" id="unit">unit: __UNIT__</span>
+    <span style="margin-left:auto;opacity:.7">node __NODE_ID__</span>
+  </div>
+  <div id="err"></div>
+  <div id="canvas-wrap"></div>
+  <script>
+    window.__ROBOT_ARM__ = {
+      nodeId: '__NODE_ID__',
+      preset: '__PRESET__',
+      unit: '__UNIT__'
+    };
+  </script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+      "urdf-loader": "https://cdn.jsdelivr.net/npm/urdf-loader@0.12.3/src/URDFLoader.js"
+    }
+  }
+  </script>
+  <script type="module" src="/robot-arm/static/viewer.js"></script>
+</body>
+</html>
