@@ -1,0 +1,64 @@
+[
+  {
+    "id": "flow04",
+    "type": "tab",
+    "label": "04 Controller + ROS2",
+    "disabled": false,
+    "info": "Both pendant and rosbridge. Pendant+armed briefly preferred over rosbridge (P0 last-writer + source tag)."
+  },
+  {
+    "id": "ctrl04",
+    "type": "controller",
+    "z": "flow04",
+    "name": "pendant",
+    "robotTag": "robot",
+    "modelPreset": "ur5e-gripper",
+    "jointList": "",
+    "unit": "rad",
+    "stepSize": 0.01,
+    "x": 220,
+    "y": 160,
+    "wires": [["robot04"]]
+  },
+  {
+    "id": "robot04",
+    "type": "robot",
+    "z": "flow04",
+    "name": "arm",
+    "robotTag": "robot",
+    "modelPreset": "ur5e-gripper",
+    "urdfPath": "",
+    "unit": "rad",
+    "rosbridgeEnable": true,
+    "rosbridgeUrl": "ws://localhost:9090",
+    "jointStatesTopic": "/joint_states",
+    "publishTopic": "/joint_command",
+    "x": 440,
+    "y": 200,
+    "wires": [["debug04"]]
+  },
+  {
+    "id": "debug04",
+    "type": "debug",
+    "z": "flow04",
+    "name": "merged",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 640,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "comment04",
+    "type": "comment",
+    "z": "flow04",
+    "name": "Priority: pendant (source=pendant, manualArmed) wins for ~2s over rosbridge",
+    "info": "Disarm manual on pendant to let ROS2 JointState drive the view. Soft Freeze is UI-only.",
+    "x": 400,
+    "y": 80,
+    "wires": []
+  }
+]
