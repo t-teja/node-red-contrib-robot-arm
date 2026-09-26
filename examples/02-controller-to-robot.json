@@ -1,0 +1,64 @@
+[
+  {
+    "id": "flow02",
+    "type": "tab",
+    "label": "02 Controller → robot",
+    "disabled": false,
+    "info": "Teach pendant wired to robot"
+  },
+  {
+    "id": "ctrl02",
+    "type": "controller",
+    "z": "flow02",
+    "name": "pendant",
+    "robotTag": "robot",
+    "modelPreset": "ur5e-gripper",
+    "jointList": "",
+    "unit": "rad",
+    "stepSize": 0.01,
+    "x": 240,
+    "y": 180,
+    "wires": [["robot02"]]
+  },
+  {
+    "id": "robot02",
+    "type": "robot",
+    "z": "flow02",
+    "name": "arm",
+    "robotTag": "robot",
+    "modelPreset": "ur5e-gripper",
+    "urdfPath": "",
+    "unit": "rad",
+    "rosbridgeEnable": false,
+    "rosbridgeUrl": "ws://localhost:9090",
+    "jointStatesTopic": "/joint_states",
+    "publishTopic": "",
+    "x": 460,
+    "y": 180,
+    "wires": [["debug02"]]
+  },
+  {
+    "id": "debug02",
+    "type": "debug",
+    "z": "flow02",
+    "name": "out",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 650,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "comment02",
+    "type": "comment",
+    "z": "flow02",
+    "name": "Open /robot-arm/controller/<ctrl-id> and /robot-arm/view/<robot-id>",
+    "info": "Wire: controller → robot. Use sliders, Home, Freeze, Arm/Disarm.",
+    "x": 360,
+    "y": 80,
+    "wires": []
+  }
+]
