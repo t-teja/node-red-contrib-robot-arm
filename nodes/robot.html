@@ -1,0 +1,105 @@
+<script type="text/javascript">
+  RED.nodes.registerType('robot', {
+    category: 'robotics',
+    color: '#3D7EA6',
+    defaults: {
+      name: { value: '' },
+      robotTag: { value: 'robot' },
+      modelPreset: { value: 'ur5e-gripper' },
+      urdfPath: { value: '' },
+      unit: { value: 'rad' },
+      rosbridgeEnable: { value: false },
+      rosbridgeUrl: { value: 'ws://localhost:9090' },
+      jointStatesTopic: { value: '/joint_states' },
+      publishTopic: { value: '' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 'font-awesome/fa-android',
+    label: function () {
+      return this.name || 'robot';
+    },
+    labelStyle: function () {
+      return this.name ? 'node_label_italic' : '';
+    },
+    paletteLabel: 'robot',
+    oneditprepare: function () {
+      function toggleRos() {
+        var on = $('#node-input-rosbridgeEnable').is(':checked');
+        $('.rosbridge-opt').toggle(on);
+      }
+      $('#node-input-rosbridgeEnable').on('change', toggleRos);
+      toggleRos();
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="robot">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-robotTag"><i class="fa fa-robot"></i> Robot tag</label>
+    <input type="text" id="node-input-robotTag" placeholder="robot">
+  </div>
+  <div class="form-row">
+    <label for="node-input-modelPreset"><i class="fa fa-cube"></i> Model</label>
+    <select id="node-input-modelPreset">
+      <option value="ur5e-gripper">UR5e + gripper (primitive)</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-urdfPath"><i class="fa fa-file"></i> URDF override</label>
+    <input type="text" id="node-input-urdfPath" placeholder="optional path (unused in P0 preset)">
+  </div>
+  <div class="form-row">
+    <label for="node-input-unit"><i class="fa fa-ruler"></i> Unit</label>
+    <select id="node-input-unit">
+      <option value="rad">radians</option>
+      <option value="deg">degrees</option>
+    </select>
+  </div>
+  <hr>
+  <div class="form-row">
+    <label for="node-input-rosbridgeEnable"><i class="fa fa-plug"></i> ROS2</label>
+    <input type="checkbox" id="node-input-rosbridgeEnable" style="display:inline-block; width:auto; vertical-align:baseline;">
+    <span> Enable rosbridge WebSocket</span>
+  </div>
+  <div class="form-row rosbridge-opt">
+    <label for="node-input-rosbridgeUrl"><i class="fa fa-link"></i> URL</label>
+    <input type="text" id="node-input-rosbridgeUrl" placeholder="ws://host:9090">
+  </div>
+  <div class="form-row rosbridge-opt">
+    <label for="node-input-jointStatesTopic"><i class="fa fa-arrow-down"></i> Subscribe</label>
+    <input type="text" id="node-input-jointStatesTopic" placeholder="/joint_states">
+  </div>
+  <div class="form-row rosbridge-opt">
+    <label for="node-input-publishTopic"><i class="fa fa-arrow-up"></i> Publish</label>
+    <input type="text" id="node-input-publishTopic" placeholder="optional /joint_command">
+  </div>
+  <div class="form-tips">
+    After deploy, open the 3D view URL shown on the node status
+    (<code>/robot-arm/view/&lt;node-id&gt;</code>). Wire a <b>controller</b> node into this input for teach-pendant control.
+  </div>
+</script>
+
+<script type="text/html" data-help-name="robot">
+  <p>Robot arm node: loads a URDF preset, shows a Three.js 3D view, accepts joint commands on the input, and optionally mirrors ROS2 <code>JointState</code> via rosbridge.</p>
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object | array</span></dt>
+    <dd>Canonical <code>{ joints, unit, source }</code>, ROS JointState-like <code>{ name, position }</code>, flat joint map, or positional array.</dd>
+  </dl>
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>Current joint state: <code>{ robot, joints, unit, source, ts }</code>.</dd>
+  </dl>
+  <h3>3D view</h3>
+  <p>Self-contained viewer at <code>/robot-arm/view/&lt;id&gt;</code> (node status shows the path). Works without Dashboard 2.</p>
+  <h3>Priority (P0)</h3>
+  <p>Last-writer wins with source tags. Pendant/controller with manual armed briefly preferred over rosbridge.</p>
+  <h3>Safety</h3>
+  <p><b>NOT SIL-rated.</b> Simulation / soft UI only. Do not use as a safety controller for real hardware.</p>
+</script>
