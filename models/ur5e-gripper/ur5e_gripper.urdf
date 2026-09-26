@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<!--
+  Primitive UR5e-like 6-DOF arm + simple 2-finger gripper.
+  Uses only cylinder/box/sphere geometry so it renders without external mesh files.
+  Dimensions are approximate industrial-arm proportions (not CAD-accurate).
+  Real Universal Robots / Robotiq meshes can replace the <visual> blocks later.
+-->
+<robot name="ur5e_gripper">
+
+  <!-- ========== LINKS ========== -->
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.075" length="0.10"/></geometry>
+      <material name="dark_grey"><color rgba="0.25 0.25 0.28 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.075" length="0.10"/></geometry>
+    </collision>
+  </link>
+
+  <link name="shoulder_link">
+    <visual>
+      <origin xyz="0 0 0.07" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.06" length="0.14"/></geometry>
+      <material name="ur_blue"><color rgba="0.15 0.35 0.65 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.07" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.06" length="0.14"/></geometry>
+    </collision>
+  </link>
+
+  <link name="upper_arm_link">
+    <visual>
+      <origin xyz="0 0 0.2125" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.045" length="0.425"/></geometry>
+      <material name="ur_blue2"><color rgba="0.18 0.40 0.70 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.2125" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.045" length="0.425"/></geometry>
+    </collision>
+  </link>
+
+  <link name="forearm_link">
+    <visual>
+      <origin xyz="0 0 0.196" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.04" length="0.392"/></geometry>
+      <material name="ur_blue3"><color rgba="0.20 0.45 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.196" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.04" length="0.392"/></geometry>
+    </collision>
+  </link>
+
+  <link name="wrist_1_link">
+    <visual>
+      <origin xyz="0 0 0.0475" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.035" length="0.095"/></geometry>
+      <material name="grey1"><color rgba="0.45 0.45 0.48 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0475" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.035" length="0.095"/></geometry>
+    </collision>
+  </link>
+
+  <link name="wrist_2_link">
+    <visual>
+      <origin xyz="0 0 0.0475" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.032" length="0.095"/></geometry>
+      <material name="grey2"><color rgba="0.50 0.50 0.53 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0475" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.032" length="0.095"/></geometry>
+    </collision>
+  </link>
+
+  <link name="wrist_3_link">
+    <visual>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.03" length="0.08"/></geometry>
+      <material name="grey3"><color rgba="0.55 0.55 0.58 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.03" length="0.08"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Gripper base (flange-mounted) -->
+  <link name="gripper_base_link">
+    <visual>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry><box size="0.08 0.08 0.05"/></geometry>
+      <material name="gripper_black"><color rgba="0.12 0.12 0.12 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry><box size="0.08 0.08 0.05"/></geometry>
+    </collision>
+  </link>
+
+  <link name="finger_left_link">
+    <visual>
+      <origin xyz="0 0.01 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.015 0.02 0.06"/></geometry>
+      <material name="finger"><color rgba="0.85 0.65 0.15 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0.01 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.015 0.02 0.06"/></geometry>
+    </collision>
+  </link>
+
+  <link name="finger_right_link">
+    <visual>
+      <origin xyz="0 -0.01 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.015 0.02 0.06"/></geometry>
+      <material name="finger2"><color rgba="0.85 0.65 0.15 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.01 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.015 0.02 0.06"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Tool tip frame (fixed) -->
+  <link name="tool0">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.008"/></geometry>
+      <material name="tip"><color rgba="0.9 0.2 0.2 1"/></material>
+    </visual>
+  </link>
+
+  <!-- ========== JOINTS (UR-style names) ========== -->
+
+  <joint name="shoulder_pan_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="shoulder_link"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-6.2832" upper="6.2832" effort="150" velocity="3.14"/>
+  </joint>
+
+  <joint name="shoulder_lift_joint" type="revolute">
+    <parent link="shoulder_link"/>
+    <child link="upper_arm_link"/>
+    <origin xyz="0 0.14 0" rpy="0 1.5708 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-6.2832" upper="6.2832" effort="150" velocity="3.14"/>
+  </joint>
+
+  <joint name="elbow_joint" type="revolute">
+    <parent link="upper_arm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="0 -0.02 0.425" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1416" upper="3.1416" effort="150" velocity="3.14"/>
+  </joint>
+
+  <joint name="wrist_1_joint" type="revolute">
+    <parent link="forearm_link"/>
+    <child link="wrist_1_link"/>
+    <origin xyz="0 0 0.392" rpy="0 1.5708 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-6.2832" upper="6.2832" effort="28" velocity="3.14"/>
+  </joint>
+
+  <joint name="wrist_2_joint" type="revolute">
+    <parent link="wrist_1_link"/>
+    <child link="wrist_2_link"/>
+    <origin xyz="0 0.095 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-6.2832" upper="6.2832" effort="28" velocity="3.14"/>
+  </joint>
+
+  <joint name="wrist_3_joint" type="revolute">
+    <parent link="wrist_2_link"/>
+    <child link="wrist_3_link"/>
+    <origin xyz="0 0 0.095" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-6.2832" upper="6.2832" effort="28" velocity="3.14"/>
+  </joint>
+
+  <joint name="gripper_fixed" type="fixed">
+    <parent link="wrist_3_link"/>
+    <child link="gripper_base_link"/>
+    <origin xyz="0 0 0.08" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Primary actuated gripper joint (mirrored to right finger via mimic-like logic in viewer) -->
+  <joint name="finger_joint" type="prismatic">
+    <parent link="gripper_base_link"/>
+    <child link="finger_left_link"/>
+    <origin xyz="0 0.02 0.05" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0" upper="0.04" effort="20" velocity="0.1"/>
+  </joint>
+
+  <joint name="finger_joint_right" type="prismatic">
+    <parent link="gripper_base_link"/>
+    <child link="finger_right_link"/>
+    <origin xyz="0 -0.02 0.05" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit lower="0.0" upper="0.04" effort="20" velocity="0.1"/>
+  </joint>
+
+  <joint name="tool0_fixed" type="fixed">
+    <parent link="gripper_base_link"/>
+    <child link="tool0"/>
+    <origin xyz="0 0 0.12" rpy="0 0 0"/>
+  </joint>
+
+</robot>
