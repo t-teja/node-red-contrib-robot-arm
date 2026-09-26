@@ -1,0 +1,73 @@
+<script type="text/javascript">
+  RED.nodes.registerType('controller', {
+    category: 'robotics',
+    color: '#5B8C5A',
+    defaults: {
+      name: { value: '' },
+      robotTag: { value: 'robot' },
+      modelPreset: { value: 'ur5e-gripper' },
+      jointList: { value: '' },
+      unit: { value: 'rad' },
+      stepSize: { value: 0.01 }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 'font-awesome/fa-sliders',
+    label: function () {
+      return this.name || 'controller';
+    },
+    labelStyle: function () {
+      return this.name ? 'node_label_italic' : '';
+    },
+    paletteLabel: 'controller'
+  });
+</script>
+
+<script type="text/html" data-template-name="controller">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-robotTag"><i class="fa fa-robot"></i> Robot tag</label>
+    <input type="text" id="node-input-robotTag" placeholder="robot">
+  </div>
+  <div class="form-row">
+    <label for="node-input-modelPreset"><i class="fa fa-cube"></i> Preset</label>
+    <select id="node-input-modelPreset">
+      <option value="ur5e-gripper">UR5e + gripper</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-jointList"><i class="fa fa-list"></i> Joints</label>
+    <input type="text" id="node-input-jointList" placeholder="blank = inherit from preset">
+  </div>
+  <div class="form-row">
+    <label for="node-input-unit"><i class="fa fa-ruler"></i> Unit</label>
+    <select id="node-input-unit">
+      <option value="rad">radians</option>
+      <option value="deg">degrees</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-stepSize"><i class="fa fa-arrows-h"></i> Step</label>
+    <input type="number" id="node-input-stepSize" step="any" placeholder="0.01">
+  </div>
+  <div class="form-tips">
+    After deploy, open the teach pendant at the URL on the node status
+    (<code>/robot-arm/controller/&lt;node-id&gt;</code>). Wire output → <b>robot</b> input.
+  </div>
+</script>
+
+<script type="text/html" data-help-name="controller">
+  <p>Teach-pendant controller: joint sliders, Home, Freeze (soft e-stop), Arm/Disarm manual. Outputs canonical joint commands for the <b>robot</b> node.</p>
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd><code>{ robot, joints, unit, source: "pendant", manualArmed, freeze, ts }</code></dd>
+  </dl>
+  <h3>UI</h3>
+  <p>HTTP page at <code>/robot-arm/controller/&lt;id&gt;</code>. Rate-limited slider emits (~20 Hz).</p>
+  <h3>Safety</h3>
+  <p>Freeze is a <b>soft UI stop</b> only — not a safety-rated e-stop. NOT SIL.</p>
+</script>
