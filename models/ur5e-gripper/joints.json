@@ -1,0 +1,13 @@
+{
+  "name": "ur5e-gripper",
+  "urdf": "ur5e_gripper.urdf",
+  "joints": [
+    { "name": "shoulder_pan_joint", "label": "Base", "min": -6.2832, "max": 6.2832, "home": 0 },
+    { "name": "shoulder_lift_joint", "label": "Shoulder", "min": -6.2832, "max": 6.2832, "home": -1.57 },
+    { "name": "elbow_joint", "label": "Elbow", "min": -3.1416, "max": 3.1416, "home": 1.57 },
+    { "name": "wrist_1_joint", "label": "Wrist 1", "min": -6.2832, "max": 6.2832, "home": -1.57 },
+    { "name": "wrist_2_joint", "label": "Wrist 2", "min": -6.2832, "max": 6.2832, "home": -1.57 },
+    { "name": "wrist_3_joint", "label": "Wrist 3", "min": -6.2832, "max": 6.2832, "home": 0 },
+    { "name": "finger_joint", "label": "Gripper", "min": 0, "max": 0.04, "home": 0, "unit": "m" }
+  ]
+}
