@@ -1,0 +1,47 @@
+{
+  "name": "node-red-contrib-robot-arm",
+  "version": "0.1.0",
+  "description": "Node-RED robotics palette: robot arm (URDF + Three.js + optional ROS2 rosbridge) and teach-pendant controller. Exactly two nodes.",
+  "author": "Teja",
+  "license": "MIT",
+  "keywords": [
+    "node-red",
+    "robotics",
+    "urdf",
+    "ros2",
+    "three.js",
+    "robot-arm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t-teja/node-red-contrib-robot-arm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/t-teja/node-red-contrib-robot-arm/issues"
+  },
+  "homepage": "https://github.com/t-teja/node-red-contrib-robot-arm#readme",
+  "node-red": {
+    "version": ">=3.0.0",
+    "nodes": {
+      "robot": "nodes/robot.js",
+      "controller": "nodes/controller.js"
+    },
+    "examples": {
+      "Inject demo": "examples/01-inject-demo.json",
+      "Controller to robot": "examples/02-controller-to-robot.json",
+      "Rosbridge live": "examples/03-rosbridge-live.json",
+      "Controller and ROS2": "examples/04-controller-and-ros2.json"
+    }
+  },
+  "dependencies": {
+    "three": "^0.169.0",
+    "urdf-loader": "^0.12.3",
+    "ws": "^8.18.0"
+  },
+  "scripts": {
+    "test": "node --test test/normalize.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
