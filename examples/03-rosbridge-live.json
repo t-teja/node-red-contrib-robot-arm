@@ -1,0 +1,50 @@
+[
+  {
+    "id": "flow03",
+    "type": "tab",
+    "label": "03 Rosbridge live",
+    "disabled": false,
+    "info": "Robot node with rosbridge enabled. Topic: /joint_states (sensor_msgs/JointState)"
+  },
+  {
+    "id": "robot03",
+    "type": "robot",
+    "z": "flow03",
+    "name": "arm-ros",
+    "robotTag": "robot",
+    "modelPreset": "ur5e-gripper",
+    "urdfPath": "",
+    "unit": "rad",
+    "rosbridgeEnable": true,
+    "rosbridgeUrl": "ws://localhost:9090",
+    "jointStatesTopic": "/joint_states",
+    "publishTopic": "",
+    "x": 400,
+    "y": 180,
+    "wires": [["debug03"]]
+  },
+  {
+    "id": "debug03",
+    "type": "debug",
+    "z": "flow03",
+    "name": "from ros",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "x": 600,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "comment03",
+    "type": "comment",
+    "z": "flow03",
+    "name": "On robot PC: ros2 launch rosbridge_server rosbridge_websocket_launch.xml",
+    "info": "Set rosbridge URL to ws://<robot-pc>:9090. Subscribes /joint_states. Status shows ros:connected when live.",
+    "x": 400,
+    "y": 80,
+    "wires": []
+  }
+]
