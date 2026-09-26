@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teach Pendant</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --border: #2a3548;
+      --text: #e7ecf1; --muted: #8b9bb4; --accent: #3d9a6a; --danger: #c44;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+      font-family: system-ui, sans-serif; padding: 16px;
+    }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    .sub { color: var(--muted); font-size: 12px; margin-bottom: 16px; }
+    .panel {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px; max-width: 520px;
+    }
+    .row {
+      display: grid; grid-template-columns: 100px 1fr 64px;
+      gap: 8px; align-items: center; margin-bottom: 10px;
+    }
+    .row label { font-size: 12px; color: var(--muted); }
+    .row input[type=range] { width: 100%; }
+    .row .val { font-variant-numeric: tabular-nums; font-size: 12px; text-align: right; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    button {
+      border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer;
+      background: #2a3f5f; color: var(--text); font-weight: 600; font-size: 13px;
+    }
+    button.primary { background: var(--accent); color: #062016; }
+    button.danger { background: var(--danger); }
+    button.armed { background: #2d6a4f; }
+    button.disarmed { background: #5c4d1a; }
+    .status { margin-top: 12px; font-size: 12px; color: var(--muted); }
+    .status.frozen { color: #f88; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>Teach Pendant</h1>
+  <div class="sub">robot: __ROBOT__ · unit: __UNIT__ · node __NODE_ID__</div>
+  <div class="panel">
+    <div id="sliders"></div>
+    <div class="actions">
+      <button class="primary" id="btn-home">Home</button>
+      <button class="danger" id="btn-freeze">Freeze</button>
+      <button class="armed" id="btn-arm">Armed</button>
+    </div>
+    <div class="status" id="status">Ready</div>
+  </div>
+  <script>
+    window.__PENDANT__ = {
+      nodeId: '__NODE_ID__',
+      unit: '__UNIT__',
+      robot: '__ROBOT__'
+    };
+  </script>
+  <script src="/robot-arm/static/controller.js"></script>
+</body>
+</html>
