@@ -19,15 +19,16 @@ const wrap = document.getElementById('canvas-wrap');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0f1419);
 
-const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 50);
-camera.position.set(1.2, 1.0, 1.2);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+const viewDir = new THREE.Vector3(0.9, 0.55, 0.9);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 wrap.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(0, 0.4, 0);
+controls.enablePan = false;
+controls.target.set(0, 0, 0);
 controls.update();
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.55));
@@ -38,15 +39,59 @@ const grid = new THREE.GridHelper(2, 20, 0x334466, 0x1e2a3a);
 scene.add(grid);
 
 let robot = null;
+let poseFramed = false;
 
-function resize() {
+// Keep the base (robot origin) at the center of the panel and pull the
+// camera back until the whole arm fits the current width and height.
+function frameBase(keepAngle) {
+  if (!robot) return;
   const w = wrap.clientWidth;
   const h = wrap.clientHeight;
-  camera.aspect = w / Math.max(h, 1);
-  camera.updateProjectionMatrix();
+  if (w < 2 || h < 2) return;
+  camera.aspect = w / h;
   renderer.setSize(w, h, false);
+  robot.updateMatrixWorld(true);
+  const origin = new THREE.Vector3();
+  robot.getWorldPosition(origin);
+  const box = new THREE.Box3().setFromObject(robot);
+  if (box.isEmpty()) return;
+  const corner = new THREE.Vector3();
+  let radius = 0.25;
+  for (const x of [box.min.x, box.max.x]) {
+    for (const y of [box.min.y, box.max.y]) {
+      for (const z of [box.min.z, box.max.z]) {
+        corner.set(x, y, z);
+        radius = Math.max(radius, corner.distanceTo(origin));
+      }
+    }
+  }
+  const vFov = THREE.MathUtils.degToRad(camera.fov);
+  const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+  const distance = Math.max(radius / Math.tan(vFov / 2), radius / Math.tan(hFov / 2)) * 1.35;
+  if (keepAngle) {
+    viewDir.copy(camera.position).sub(controls.target);
+    if (viewDir.lengthSq() < 1e-8) viewDir.set(0.9, 0.55, 0.9);
+  } else {
+    viewDir.set(0.9, 0.55, 0.9);
+  }
+  viewDir.normalize();
+  controls.target.copy(origin);
+  camera.position.copy(origin).addScaledVector(viewDir, distance);
+  camera.near = Math.max(distance / 200, 0.001);
+  camera.far = Math.max(distance * 20, 10);
+  camera.updateProjectionMatrix();
+  const floor = Math.max(radius * 2.4, 0.6);
+  grid.scale.set(floor / 2, 1, floor / 2);
+  controls.update();
+}
+
+function resize() {
+  frameBase(true);
 }
 window.addEventListener('resize', resize);
+if (typeof ResizeObserver !== 'undefined') {
+  new ResizeObserver(() => frameBase(true)).observe(wrap);
+}
 resize();
 
 function animate() {
@@ -72,6 +117,10 @@ function applyJoints(joints) {
     try {
       robot.joints.finger_joint_right.setJointValue(joints.finger_joint);
     } catch (_) { /* ignore */ }
+  }
+  if (!poseFramed) {
+    poseFramed = true;
+    frameBase(false);
   }
 }
 
@@ -113,6 +162,7 @@ try {
     }
   });
   scene.add(robot);
+  frameBase(false);
 } catch (e) {
   showErr('URDF load failed: ' + (e && e.message ? e.message : String(e)));
 }
