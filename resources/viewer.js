@@ -50,6 +50,8 @@ function frameBase(keepAngle) {
   if (w < 2 || h < 2) return;
   camera.aspect = w / h;
   renderer.setSize(w, h, false);
+  renderer.domElement.style.width = '100%';
+  renderer.domElement.style.height = '100%';
   robot.updateMatrixWorld(true);
   const origin = new THREE.Vector3();
   robot.getWorldPosition(origin);

@@ -6,7 +6,7 @@
   <title>Robot Arm Viewer</title>
   <style>
     * { box-sizing: border-box; }
-    html, body { margin: 0; height: 100%; background: #0f1419; color: #e7ecf1; font-family: system-ui, sans-serif; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0f1419; color: #e7ecf1; font-family: system-ui, sans-serif; }
     #bar {
       display: flex; align-items: center; gap: 12px; padding: 8px 14px;
       background: #1a2332; border-bottom: 1px solid #2a3548; font-size: 13px;
@@ -15,8 +15,8 @@
       padding: 2px 8px; border-radius: 999px; background: #243044; font-size: 11px;
     }
     #bar .badge.ok { background: #1e4d3a; }
-    #canvas-wrap { position: absolute; inset: 40px 0 0 0; }
-    canvas { display: block; width: 100%; height: 100%; }
+    #canvas-wrap { position: absolute; inset: 40px 0 0 0; overflow: hidden; }
+    canvas { display: block; width: 100% !important; height: 100% !important; max-width: 100%; max-height: 100%; }
     #err { color: #f88; padding: 12px; display: none; }
   </style>
 </head>
