@@ -46,7 +46,9 @@ export default defineConfig({
         globals: {
           vue: 'Vue',
           vuex: 'vuex'
-        }
+        },
+        // Dashboard 2 looks up window[<widget name>][<component>], not the Vite library name.
+        footer: `(function(){var lib=window["robot-arm-widgets"]||{};function pub(name,comp){var slot=window[name]||(window[name]={});if(lib[comp])slot[comp]=lib[comp];}pub("ui-robot-arm","UIRobotArm");pub("ui-robot-controller","UIRobotController");})();`
       }
     }
   }
