@@ -2,7 +2,7 @@
   {
     "id": "flow02",
     "type": "tab",
-    "label": "02 Controller → robot",
+    "label": "02 Controller \u2192 robot",
     "disabled": false,
     "info": "Teach pendant wired to robot"
   },
@@ -12,13 +12,17 @@
     "z": "flow02",
     "name": "pendant",
     "robotTag": "robot",
-    "modelPreset": "ur5e-gripper",
+    "modelPreset": "ur5e",
     "jointList": "",
     "unit": "rad",
     "stepSize": 0.01,
     "x": 240,
     "y": 180,
-    "wires": [["robot02"]]
+    "wires": [
+      [
+        "robot02"
+      ]
+    ]
   },
   {
     "id": "robot02",
@@ -26,7 +30,7 @@
     "z": "flow02",
     "name": "arm",
     "robotTag": "robot",
-    "modelPreset": "ur5e-gripper",
+    "modelPreset": "ur5e",
     "urdfPath": "",
     "unit": "rad",
     "rosbridgeEnable": false,
@@ -35,7 +39,11 @@
     "publishTopic": "",
     "x": 460,
     "y": 180,
-    "wires": [["debug02"]]
+    "wires": [
+      [
+        "debug02"
+      ]
+    ]
   },
   {
     "id": "debug02",
@@ -56,7 +64,7 @@
     "type": "comment",
     "z": "flow02",
     "name": "Open /robot-arm/controller/<ctrl-id> and /robot-arm/view/<robot-id>",
-    "info": "Wire: controller → robot. Use sliders, Home, Freeze, Arm/Disarm.",
+    "info": "Wire: controller \u2192 robot. Use sliders, Home, Freeze, Arm/Disarm.",
     "x": 360,
     "y": 80,
     "wires": []

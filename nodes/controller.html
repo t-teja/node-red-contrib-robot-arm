@@ -5,7 +5,7 @@
     defaults: {
       name: { value: '' },
       robotTag: { value: 'robot' },
-      modelPreset: { value: 'ur5e-gripper' },
+      modelPreset: { value: 'ur5e' },
       jointList: { value: '' },
       unit: { value: 'rad' },
       stepSize: { value: 0.01 }
@@ -35,7 +35,8 @@
   <div class="form-row">
     <label for="node-input-modelPreset"><i class="fa fa-cube"></i> Preset</label>
     <select id="node-input-modelPreset">
-      <option value="ur5e-gripper">UR5e + gripper</option>
+      <option value="ur5e">UR5e (STL meshes)</option>
+      <option value="ur5e-gripper">UR5e + simple gripper</option>
     </select>
   </div>
   <div class="form-row">

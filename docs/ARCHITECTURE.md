@@ -1,13 +1,13 @@
-# Architecture — two-node design
+# Architecture
 
-## Product shape (locked)
+## Palette nodes
 
-Exactly **two** palette nodes:
+1. **`robot`** — arm model, normalize, rosbridge, HTTP view + pendant API  
+2. **`controller`** — standalone teach pendant (HTTP) for non-Dashboard flows  
+3. **`ui-robot-arm`** — Dashboard 2 3D view (iframe of `/robot-arm/view/:id`)  
+4. **`ui-robot-controller`** — Dashboard 2 pendant (iframe of `/robot-arm/pendant/:id`)
 
-1. **`robot`** — the arm
-2. **`controller`** — the teach pendant
-
-Everything else is a library, HTTP resource, or config field — not a separate palette node.
+npm package name is `node-red-dashboard-2-robot-arm` so Dashboard discovers widgets.
 
 ## Data flow
 
@@ -15,52 +15,37 @@ Everything else is a library, HTTP resource, or config field — not a separate 
  Function / Inject / rosbridge
             │
             ▼
-     ┌──────────────┐     HTTP SSE      ┌─────────────┐
+     ┌──────────────┐     SSE/HTTP      ┌─────────────┐
      │    robot     │──────────────────▶│  viewer.js  │
-     │ normalize()  │                   │  Three.js   │
-     │ RosbridgeClient                  │  URDF       │
-     └──────▲───────┘                   └─────────────┘
-            │ msg.payload
-     ┌──────┴───────┐     HTTP POST     ┌─────────────┐
-     │  controller  │◀──────────────────│ pendant UI  │
-     │  rate-limit  │                   │  sliders    │
+     │ RobotRuntime │                   │  URDF+STL   │
+     │ RosbridgeClient                  └─────────────┘
+     └──────▲───────┘
+            │ POST /api/:id/joints
+     ┌──────┴───────┐                   ┌─────────────┐
+     │   pendant    │                   │ D2 widgets  │
+     │  (or ctrl)   │                   │  (iframes)  │
      └──────────────┘                   └─────────────┘
 ```
 
-## `robot` responsibilities
+## Models
 
-| Concern | Where |
-|---------|--------|
-| Joint normalize | `lib/normalize.js` (folded into robot) |
-| Rosbridge WS | `lib/rosbridge.js` (folded into robot) |
-| URDF preset | `models/ur5e-gripper/` |
-| 3D view | `resources/viewer.*` via `RED.httpNode` `/robot-arm/view/:id` |
-| Flow I/O | 1 input (commands), 1 output (state) |
+- `models/ur5e/` — UR5e URDF + `meshes/*.stl` (BSD-3-Clause)  
+- `models/ur5e-gripper/` — same meshes + primitive gripper on `tool0`
 
-Config on the node: model preset, unit, optional rosbridge URL + topics.
+HTTP serves nested paths: `/robot-arm/models/:preset/*` (e.g. `meshes/base.stl`).
 
-## `controller` responsibilities
+## Libraries
 
-| Concern | Where |
-|---------|--------|
-| Joint slider UI | `resources/controller.*` via `/robot-arm/controller/:id` |
-| Home / Freeze / Arm | emitted as payload flags |
-| Canonical cmds | `{ joints, unit, source: "pendant", manualArmed, freeze }` |
-
-## Priority policy (P0)
-
-- Every update carries `source`: `pendant` | `rosbridge` | `inject` | `input` | …
-- Simple **last-writer** merge into `robot` state
-- If `manualArmed` and recent pendant traffic (< 2 s), **ignore** rosbridge writes
-
-## Explicitly not palette nodes (v1)
-
-- `robot-in` / `robot-out` — folded into `robot` input/output
-- `robot-model` — preset + URDF path on `robot`
-- `robot-ros2` — rosbridge options on `robot`
-- `robot-mux` — merge policy inside `robot`
-- `robot-ik` — future lib for controller Cartesian mode
+| File | Role |
+|------|------|
+| `lib/normalize.js` | Payload → canonical joints |
+| `lib/rosbridge.js` | WS client: subscribe / advertise / publish |
+| `lib/robot-runtime.js` | State + applyCommand + publish hook (unit-tested) |
 
 ## Dashboard 2
 
-P0 ships a **self-contained HTTP viewer/pendant** so starters work without `@flowfuse/node-red-dashboard`. Status text on each node shows the URL. A native Dashboard 2 ui-widget can wrap the same pages later.
+Built UMD: `resources/robot-arm-widgets.umd.js` (committed). Widgets bind to a `robot` node id via config dropdown.
+
+## Safety
+
+NOT SIL. Soft UI freeze only.

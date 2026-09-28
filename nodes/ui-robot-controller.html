@@ -1,0 +1,79 @@
+<script type="text/javascript">
+  RED.nodes.registerType('ui-robot-controller', {
+    category: RED._('@flowfuse/node-red-dashboard/ui-base:ui-base.label.category') || 'dashboard 2',
+    color: '#5B8C5A',
+    defaults: {
+      name: { value: '' },
+      group: { type: 'ui-group', required: true },
+      order: { value: 0 },
+      width: {
+        value: 4,
+        validate: function (v) {
+          const width = v || 0;
+          const currentGroup = $('#node-input-group').val() || this.group;
+          const groupNode = RED.nodes.node(currentGroup);
+          const valid = !groupNode || +width <= +groupNode.width;
+          $('#node-input-size').toggleClass('input-error', !valid);
+          return valid;
+        }
+      },
+      height: { value: 6 },
+      robot: { value: '', required: true }
+    },
+    inputs: 0,
+    outputs: 0,
+    icon: 'font-awesome/fa-sliders',
+    paletteLabel: 'ui-robot-controller',
+    label: function () {
+      return this.name || 'ui-robot-controller';
+    },
+    oneditprepare: function () {
+      $('#node-input-size').elementSizer({
+        width: '#node-input-width',
+        height: '#node-input-height',
+        group: '#node-input-group'
+      });
+      const select = $('#node-input-robot');
+      const current = this.robot;
+      select.empty();
+      select.append($('<option></option>').val('').text('— select robot node —'));
+      RED.nodes.eachNode(function (n) {
+        if (n.type === 'robot') {
+          const label = (n.name || 'robot') + ' [' + n.id + ']';
+          select.append($('<option></option>').val(n.id).text(label));
+        }
+      });
+      select.val(current || '');
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="ui-robot-controller">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-group"><i class="fa fa-table"></i> Group</label>
+    <input type="text" id="node-input-group">
+  </div>
+  <div class="form-row">
+    <label><i class="fa fa-object-group"></i> Size</label>
+    <input type="hidden" id="node-input-width">
+    <input type="hidden" id="node-input-height">
+    <button class="editor-button" id="node-input-size"></button>
+  </div>
+  <div class="form-row">
+    <label for="node-input-robot"><i class="fa fa-android"></i> Robot</label>
+    <select id="node-input-robot"></select>
+  </div>
+  <div class="form-tips">
+    Teach pendant bound to the selected <b>robot</b> node (iframe of
+    <code>/robot-arm/pendant/&lt;id&gt;</code>). Sends joint commands directly to that robot —
+    no separate controller wiring required for Dashboard use.
+  </div>
+</script>
+
+<script type="text/html" data-help-name="ui-robot-controller">
+  <p>Dashboard 2 teach-pendant widget bound to a <b>robot</b> node. Soft Freeze is UI-only — not SIL.</p>
+</script>

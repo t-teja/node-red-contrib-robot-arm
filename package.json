@@ -1,16 +1,18 @@
 {
-  "name": "node-red-contrib-robot-arm",
-  "version": "0.1.1",
-  "description": "Node-RED robotics palette: robot arm (URDF + Three.js + optional ROS2 rosbridge) and teach-pendant controller. Exactly two nodes.",
+  "name": "node-red-dashboard-2-robot-arm",
+  "version": "0.2.0",
+  "description": "Node-RED + FlowFuse Dashboard 2 robot arm: realistic UR5e URDF/STL viewer, teach pendant, optional ROS2 rosbridge. Palette: robot, controller, ui-robot-arm, ui-robot-controller.",
   "author": "Teja",
   "license": "MIT",
   "keywords": [
     "node-red",
+    "node-red-dashboard-2",
     "robotics",
     "urdf",
     "ros2",
     "three.js",
-    "robot-arm"
+    "robot-arm",
+    "ur5e"
   ],
   "repository": {
     "type": "git",
@@ -20,26 +22,74 @@
     "url": "https://github.com/t-teja/node-red-contrib-robot-arm/issues"
   },
   "homepage": "https://github.com/t-teja/node-red-contrib-robot-arm#readme",
+  "files": [
+    "nodes/*",
+    "lib/*",
+    "models/**/*",
+    "resources/*",
+    "ui/components/*",
+    "ui/index.js",
+    "examples/*",
+    "docs/*",
+    "LICENSE",
+    "README.md"
+  ],
   "node-red": {
     "version": ">=3.0.0",
     "nodes": {
       "robot": "nodes/robot.js",
-      "controller": "nodes/controller.js"
+      "controller": "nodes/controller.js",
+      "ui-robot-arm": "nodes/ui-robot-arm.js",
+      "ui-robot-controller": "nodes/ui-robot-controller.js"
     },
     "examples": {
       "Inject demo": "examples/01-inject-demo.json",
       "Controller to robot": "examples/02-controller-to-robot.json",
       "Rosbridge live": "examples/03-rosbridge-live.json",
-      "Controller and ROS2": "examples/04-controller-and-ros2.json"
+      "Controller and ROS2": "examples/04-controller-and-ros2.json",
+      "Dashboard 2": "examples/05-dashboard2.json"
+    }
+  },
+  "node-red-dashboard-2": {
+    "version": "1.0.0",
+    "widgets": {
+      "ui-robot-arm": {
+        "output": "robot-arm-widgets.umd.js",
+        "component": "UIRobotArm"
+      },
+      "ui-robot-controller": {
+        "output": "robot-arm-widgets.umd.js",
+        "component": "UIRobotController"
+      }
     }
   },
   "dependencies": {
     "three": "^0.169.0",
     "urdf-loader": "^0.12.3",
+    "vue": "^3.3.8",
+    "vuex": "^4.1.0",
     "ws": "^8.18.0"
   },
+  "peerDependencies": {
+    "@flowfuse/node-red-dashboard": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@flowfuse/node-red-dashboard": {
+      "optional": true
+    }
+  },
+  "optionalDependencies": {
+    "@flowfuse/node-red-dashboard": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.0",
+    "vite-plugin-css-injected-by-js": "^3.5.2"
+  },
   "scripts": {
-    "test": "node --test test/normalize.test.js"
+    "build": "vite build",
+    "build:dev": "NODE_ENV=development vite build",
+    "test": "node --test test/*.test.js"
   },
   "engines": {
     "node": ">=18"

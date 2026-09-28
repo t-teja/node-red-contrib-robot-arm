@@ -22,10 +22,11 @@
 </head>
 <body>
   <div id="bar">
-    <strong>node-red-contrib-robot-arm</strong>
+    <strong>robot-arm</strong>
     <span class="badge" id="src">source: —</span>
     <span class="badge" id="rb">ros: —</span>
     <span class="badge" id="unit">unit: __UNIT__</span>
+    <span class="badge" id="preset">__PRESET__</span>
     <span style="margin-left:auto;opacity:.7">node __NODE_ID__</span>
   </div>
   <div id="err"></div>
@@ -34,6 +35,7 @@
     window.__ROBOT_ARM__ = {
       nodeId: '__NODE_ID__',
       preset: '__PRESET__',
+      urdf: '__URDF__',
       unit: '__UNIT__'
     };
   </script>

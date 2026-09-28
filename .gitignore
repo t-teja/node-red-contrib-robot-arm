@@ -8,7 +8,7 @@ yarn-error.log*
 .vscode/
 coverage/
 .nyc_output/
-dist/
+ui/dist/
 *.tgz
 .env
 .env.*

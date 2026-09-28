@@ -1,26 +1,36 @@
-# node-red-contrib-robot-arm
+# node-red-dashboard-2-robot-arm
 
-Node-RED palette package for a **robot arm** with URDF + Three.js visualization and an optional ROS2 rosbridge feed, plus a **teach-pendant controller**.
+Node-RED robotics package with a **realistic UR5e** (URDF + STL meshes), Three.js viewer, teach pendant, optional **ROS2 rosbridge**, and **FlowFuse Dashboard 2** widgets.
 
-## Exactly two nodes
+> **npm package name:** `node-red-dashboard-2-robot-arm`  
+> **GitHub repo:** [t-teja/node-red-contrib-robot-arm](https://github.com/t-teja/node-red-contrib-robot-arm)  
+> Install from git still works (see below).
+
+## Nodes
+
+| Palette node | Role |
+|--------------|------|
+| **`robot`** | URDF model, joint state, HTTP 3D view, optional rosbridge subscribe/publish |
+| **`controller`** | Standalone teach-pendant HTTP UI → wire output into `robot` |
+| **`ui-robot-arm`** | Dashboard 2 widget: 3D view bound to a `robot` node |
+| **`ui-robot-controller`** | Dashboard 2 widget: pendant bound to the same `robot` node |
 
 ```
-┌─────────────┐         ┌─────────────┐
-│ controller  │────────▶│    robot    │──▶ joints / status
-│  (pendant)  │         │  (URDF+3D)  │
-└─────────────┘         └──────┬──────┘
-                               │ optional
-                               ▼
-                        ROS2 rosbridge
-                     (/joint_states, …)
+ Function / Inject / rosbridge          Dashboard 2 page
+            │                           ┌─ ui-robot-arm ────────┐
+            ▼                           │  iframe /view/:id     │
+     ┌──────────────┐                   ├─ ui-robot-controller ─┤
+     │    robot     │◀── HTTP pendant ──│  iframe /pendant/:id  │
+     │ normalize +  │                   └───────────────────────┘
+     │ RosbridgeClient
+     └──────────────┘
 ```
 
-| Palette node   | Role |
-|----------------|------|
-| **`robot`**    | Arm model (URDF), 3D view, input joints from flows / Function, built-in rosbridge subscribe |
-| **`controller`** | Dashboard teach pendant: joint sliders, Home, soft Freeze, Arm/Disarm → canonical joint cmds |
+Standalone HTTP pages remain available without Dashboard:
 
-There are **no** separate `robot-in`, `robot-out`, `robot-model`, `robot-ros2`, `robot-mux`, or `robot-ik` palette nodes in v1. Normalize + rosbridge live **inside** `robot`. Cartesian IK is reserved for a later controller mode; P0 is joint space.
+- `/robot-arm/view/<robot-node-id>`
+- `/robot-arm/controller/<controller-node-id>` (wired controller node)
+- `/robot-arm/pendant/<robot-node-id>` (robot-bound pendant used by D2)
 
 ## Install
 
@@ -29,22 +39,47 @@ cd ~/.node-red
 npm install t-teja/node-red-contrib-robot-arm
 ```
 
-Then restart Node-RED. Nodes appear under the **robotics** category.
+That git URL installs this repo; the published **package name** is `node-red-dashboard-2-robot-arm` so Dashboard 2 can discover the widgets (`node-red-dashboard-2-` prefix).
 
-## Quick start
+For Dashboard widgets, also install:
 
-1. Import an example (Menu → Import → select a file, or clipboard):
-   - `node_modules/node-red-contrib-robot-arm/examples/01-inject-demo.json`
-   - `…/examples/02-controller-to-robot.json`
-   - `…/examples/03-rosbridge-live.json`
-   - `…/examples/04-controller-and-ros2.json`
+```bash
+npm install @flowfuse/node-red-dashboard
+```
+
+(`@flowfuse/node-red-dashboard` is an **optional** peer — the `robot` / `controller` nodes and HTTP pages work without it.)
+
+Restart Node-RED after install.
+
+## Quick start (HTTP)
+
+1. Import `examples/01-inject-demo.json` (or 02–04).
 2. **Deploy**.
-3. Click the **`robot`** node — status shows the 3D view path, e.g. `/robot-arm/view/<node-id>`.
-4. Open that path on your Node-RED host (e.g. `http://localhost:1880/robot-arm/view/<id>`).
-5. For the pendant, open the URL on the **`controller`** status: `/robot-arm/controller/<id>`.
-6. Wire **controller → robot** (example 02).
+3. Open the URL on the `robot` status: `/robot-arm/view/<id>`.
+4. For a wired pendant, import example 02 and open `/robot-arm/controller/<ctrl-id>`.
 
-Examples are also listed under `package.json` → `node-red.examples` when your Node-RED version surfaces them in the import UI.
+## Quick start (Dashboard 2)
+
+1. Install `@flowfuse/node-red-dashboard`.
+2. Import `examples/05-dashboard2.json`.
+3. Deploy, open the Dashboard **Robot Arm** page.
+4. `ui-robot-arm` + `ui-robot-controller` both select the same `robot` node — one arm drives the view, pendant, and flow I/O.
+
+## Models
+
+| Preset | Description |
+|--------|-------------|
+| **`ur5e`** (default) | Connected UR5e STL meshes + official kinematics |
+| **`ur5e-gripper`** | Same UR5e meshes + simple primitive gripper on `tool0` |
+
+Meshes are served under `/robot-arm/models/ur5e/meshes/*.stl` (nested paths supported).
+
+### Mesh attribution
+
+UR5e visual meshes and kinematics are derived from
+[UniversalRobots/Universal_Robots_ROS2_Description](https://github.com/UniversalRobots/Universal_Robots_ROS2_Description)
+(**BSD-3-Clause**). See `models/ur5e/LICENSE` and `models/ur5e/README.md`.
+The optional gripper on `ur5e-gripper` uses approximate box primitives (not Robotiq CAD).
 
 ## ROS2 / rosbridge
 
@@ -58,10 +93,12 @@ On the **`robot`** node:
 
 - Enable rosbridge
 - URL: `ws://<robot-pc-host>:9090`
-- Subscribe topic: `/joint_states` (`sensor_msgs/JointState`)
-- Optional publish topic for outbound commands
+- Subscribe: `/joint_states` (`sensor_msgs/JointState`)
+- Optional publish topic (auto-advertised) for outbound commands
 
-**Priority (P0):** last-writer wins with a `source` tag. When the pendant sends with `source: "pendant"` and `manualArmed`, those updates are preferred over rosbridge for a short window (~2 s).
+**Honest limits:** this package needs a real rosbridge WebSocket (or compatible mock) at the configured URL. It is not a full ROS 2 client, does not speak DDS, and will not invent joint traffic without a publisher. Unit tests include a mock rosbridge WebSocket server.
+
+**Priority:** last-writer wins with a `source` tag. Pendant/`manualArmed` briefly preferred over rosbridge (~2 s).
 
 ## Message shape
 
@@ -76,8 +113,7 @@ Canonical payload (input and output):
     "elbow_joint": 1.57,
     "wrist_1_joint": -1.57,
     "wrist_2_joint": -1.57,
-    "wrist_3_joint": 0,
-    "finger_joint": 0
+    "wrist_3_joint": 0
   },
   "unit": "rad",
   "source": "pendant",
@@ -87,16 +123,28 @@ Canonical payload (input and output):
 
 Also accepted: ROS `JointState`-like `{ name, position }`, flat joint maps, or positional arrays.
 
+## Examples
+
+| File | Purpose |
+|------|---------|
+| `01-inject-demo.json` | Inject Home / Reach / Wave → robot |
+| `02-controller-to-robot.json` | Wired teach pendant → robot |
+| `03-rosbridge-live.json` | Live `/joint_states` |
+| `04-controller-and-ros2.json` | Pendant + rosbridge priority |
+| `05-dashboard2.json` | ui-base / page / groups + both D2 widgets |
+
+## Develop / test
+
+```bash
+npm install
+npm test
+npm run build   # rebuilds resources/robot-arm-widgets.umd.js (committed for users)
+```
+
 ## Safety
 
 **NOT SIL-rated.** Simulation and soft UI only. Freeze / e-stop on the pendant is a **UI soft stop**, not a safety-rated emergency stop. Do not use this package as a functional-safety controller for real hardware.
 
-## Model attribution
-
-The bundled `models/ur5e-gripper` URDF uses **primitive geometries** (cylinder / box / sphere) sized like a UR-style 6-DOF arm + simple gripper so it renders **without external mesh files**.
-
-Dimensions are approximate and **not** CAD-accurate Universal Robots or Robotiq assets. Real UR / Robotiq meshes can replace the `<visual>` blocks later; joint names follow common UR conventions where possible (`shoulder_pan_joint`, …, `wrist_3_joint`, `finger_joint`).
-
 ## License
 
-MIT © 2026 Teja
+MIT © 2026 Teja — with UR5e mesh/LICENSE under BSD-3-Clause (Universal Robots), see `models/ur5e/LICENSE`.

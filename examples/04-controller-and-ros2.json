@@ -12,13 +12,17 @@
     "z": "flow04",
     "name": "pendant",
     "robotTag": "robot",
-    "modelPreset": "ur5e-gripper",
+    "modelPreset": "ur5e",
     "jointList": "",
     "unit": "rad",
     "stepSize": 0.01,
     "x": 220,
     "y": 160,
-    "wires": [["robot04"]]
+    "wires": [
+      [
+        "robot04"
+      ]
+    ]
   },
   {
     "id": "robot04",
@@ -26,7 +30,7 @@
     "z": "flow04",
     "name": "arm",
     "robotTag": "robot",
-    "modelPreset": "ur5e-gripper",
+    "modelPreset": "ur5e",
     "urdfPath": "",
     "unit": "rad",
     "rosbridgeEnable": true,
@@ -35,7 +39,11 @@
     "publishTopic": "/joint_command",
     "x": 440,
     "y": 200,
-    "wires": [["debug04"]]
+    "wires": [
+      [
+        "debug04"
+      ]
+    ]
   },
   {
     "id": "debug04",

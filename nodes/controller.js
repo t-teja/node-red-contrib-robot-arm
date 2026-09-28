@@ -78,7 +78,7 @@ module.exports = function (RED) {
   }
 
   function loadPresetJoints(preset) {
-    const metaPath = path.join(PKG_ROOT, 'models', preset || 'ur5e-gripper', 'joints.json');
+    const metaPath = path.join(PKG_ROOT, 'models', preset || 'ur5e', 'joints.json');
     try {
       if (fs.existsSync(metaPath)) {
         return JSON.parse(fs.readFileSync(metaPath, 'utf8'));
@@ -102,7 +102,7 @@ module.exports = function (RED) {
 
     node.name = config.name || '';
     node.robotTag = (config.robotTag || 'robot').trim() || 'robot';
-    node.modelPreset = config.modelPreset || 'ur5e-gripper';
+    node.modelPreset = config.modelPreset || 'ur5e';
     node.unit = config.unit === 'deg' ? 'deg' : 'rad';
     node.stepSize = Number(config.stepSize) || 0.01;
 

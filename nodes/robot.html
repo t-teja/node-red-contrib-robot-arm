@@ -5,7 +5,7 @@
     defaults: {
       name: { value: '' },
       robotTag: { value: 'robot' },
-      modelPreset: { value: 'ur5e-gripper' },
+      modelPreset: { value: 'ur5e' },
       urdfPath: { value: '' },
       unit: { value: 'rad' },
       rosbridgeEnable: { value: false },
@@ -46,12 +46,13 @@
   <div class="form-row">
     <label for="node-input-modelPreset"><i class="fa fa-cube"></i> Model</label>
     <select id="node-input-modelPreset">
-      <option value="ur5e-gripper">UR5e + gripper (primitive)</option>
+      <option value="ur5e">UR5e (STL meshes)</option>
+      <option value="ur5e-gripper">UR5e + simple gripper</option>
     </select>
   </div>
   <div class="form-row">
     <label for="node-input-urdfPath"><i class="fa fa-file"></i> URDF override</label>
-    <input type="text" id="node-input-urdfPath" placeholder="optional path (unused in P0 preset)">
+    <input type="text" id="node-input-urdfPath" placeholder="optional (unused — use preset)">
   </div>
   <div class="form-row">
     <label for="node-input-unit"><i class="fa fa-ruler"></i> Unit</label>
@@ -79,13 +80,14 @@
     <input type="text" id="node-input-publishTopic" placeholder="optional /joint_command">
   </div>
   <div class="form-tips">
-    After deploy, open the 3D view URL shown on the node status
-    (<code>/robot-arm/view/&lt;node-id&gt;</code>). Wire a <b>controller</b> node into this input for teach-pendant control.
+    After deploy, open the 3D view URL on the node status
+    (<code>/robot-arm/view/&lt;node-id&gt;</code>). For Dashboard 2, place
+    <b>ui-robot-arm</b> + <b>ui-robot-controller</b> on the same page and select this robot node.
   </div>
 </script>
 
 <script type="text/html" data-help-name="robot">
-  <p>Robot arm node: loads a URDF preset, shows a Three.js 3D view, accepts joint commands on the input, and optionally mirrors ROS2 <code>JointState</code> via rosbridge.</p>
+  <p>Robot arm node: loads a UR5e URDF with STL meshes, shows a Three.js 3D view, accepts joint commands on the input, and optionally mirrors ROS2 <code>JointState</code> via rosbridge.</p>
   <h3>Inputs</h3>
   <dl class="message-properties">
     <dt>payload <span class="property-type">object | array</span></dt>
@@ -97,9 +99,9 @@
     <dd>Current joint state: <code>{ robot, joints, unit, source, ts }</code>.</dd>
   </dl>
   <h3>3D view</h3>
-  <p>Self-contained viewer at <code>/robot-arm/view/&lt;id&gt;</code> (node status shows the path). Works without Dashboard 2.</p>
-  <h3>Priority (P0)</h3>
-  <p>Last-writer wins with source tags. Pendant/controller with manual armed briefly preferred over rosbridge.</p>
+  <p>Self-contained viewer at <code>/robot-arm/view/&lt;id&gt;</code>. Dashboard 2 users can embed via <b>ui-robot-arm</b>.</p>
+  <h3>Priority</h3>
+  <p>Last-writer wins with source tags. Pendant/controller with manual armed briefly preferred over rosbridge (~2 s).</p>
   <h3>Safety</h3>
   <p><b>NOT SIL-rated.</b> Simulation / soft UI only. Do not use as a safety controller for real hardware.</p>
 </script>

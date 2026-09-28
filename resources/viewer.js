@@ -4,7 +4,8 @@ import URDFLoader from 'urdf-loader';
 
 const cfg = window.__ROBOT_ARM__ || {};
 const nodeId = cfg.nodeId;
-const preset = cfg.preset || 'ur5e-gripper';
+const preset = cfg.preset || 'ur5e';
+const urdfFile = cfg.urdf || (preset === 'ur5e-gripper' ? 'ur5e_gripper.urdf' : 'ur5e.urdf');
 const errEl = document.getElementById('err');
 const srcEl = document.getElementById('src');
 const rbEl = document.getElementById('rb');
@@ -67,7 +68,7 @@ function applyJoints(joints) {
       }
     }
   }
-  if (joints.finger_joint != null && robot.joints.finger_joint_right) {
+  if (joints.finger_joint != null && robot.joints && robot.joints.finger_joint_right) {
     try {
       robot.joints.finger_joint_right.setJointValue(joints.finger_joint);
     } catch (_) { /* ignore */ }
@@ -75,10 +76,16 @@ function applyJoints(joints) {
 }
 
 async function loadUrdf() {
-  const url = `/robot-arm/models/${encodeURIComponent(preset)}/ur5e_gripper.urdf`;
+  const base = `/robot-arm/models/${encodeURIComponent(preset)}/`;
+  const url = `${base}${encodeURIComponent(urdfFile)}`;
   const loader = new URDFLoader();
-  loader.packages = {};
-  loader.workingPath = `/robot-arm/models/${encodeURIComponent(preset)}/`;
+  // Relative mesh paths in URDF are "meshes/foo.stl" → resolve under the preset dir.
+  loader.workingPath = base;
+  loader.packages = {
+    '': base,
+    ur5e: base,
+    'ur5e-gripper': base
+  };
   return new Promise((resolve, reject) => {
     loader.load(
       url,
@@ -91,7 +98,20 @@ async function loadUrdf() {
 
 try {
   robot = await loadUrdf();
+  // URDF Z-up → Three.js Y-up
   robot.rotation.x = -Math.PI / 2;
+  robot.traverse((obj) => {
+    if (!obj.isMesh || !obj.material) return;
+    const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+    for (const mat of mats) {
+      mat.side = THREE.DoubleSide;
+      if ('metalness' in mat) {
+        mat.metalness = 0.35;
+        mat.roughness = 0.45;
+      }
+      mat.needsUpdate = true;
+    }
+  });
   scene.add(robot);
 } catch (e) {
   showErr('URDF load failed: ' + (e && e.message ? e.message : String(e)));

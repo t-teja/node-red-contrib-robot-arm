@@ -1,0 +1,143 @@
+[
+  {
+    "id": "flow05",
+    "type": "tab",
+    "label": "05 Dashboard 2",
+    "disabled": false,
+    "info": "ui-base / page / group + ui-robot-arm + ui-robot-controller bound to one robot node"
+  },
+  {
+    "id": "ui_base_05",
+    "type": "ui-base",
+    "name": "Robot UI",
+    "path": "/dashboard",
+    "includeClientData": true,
+    "acceptsClientData": true,
+    "showPathInSidebar": false
+  },
+  {
+    "id": "ui_page_05",
+    "type": "ui-page",
+    "name": "Robot Arm",
+    "ui": "ui_base_05",
+    "path": "/robot",
+    "icon": "mdi-robot-industrial",
+    "layout": "grid",
+    "theme": "ui_theme_05",
+    "order": 1,
+    "className": "",
+    "visible": true,
+    "disabled": false
+  },
+  {
+    "id": "ui_theme_05",
+    "type": "ui-theme",
+    "name": "Default",
+    "colors": {
+      "surface": "#0f1419",
+      "primary": "#3D7EA6",
+      "bgPage": "#0b1016",
+      "groupBg": "#1a2332",
+      "groupOutline": "#2a3548"
+    }
+  },
+  {
+    "id": "ui_group_view_05",
+    "type": "ui-group",
+    "name": "3D View",
+    "page": "ui_page_05",
+    "width": 8,
+    "height": 1,
+    "order": 1,
+    "showTitle": true,
+    "className": "",
+    "visible": true,
+    "disabled": false
+  },
+  {
+    "id": "ui_group_ctrl_05",
+    "type": "ui-group",
+    "name": "Pendant",
+    "page": "ui_page_05",
+    "width": 4,
+    "height": 1,
+    "order": 2,
+    "showTitle": true,
+    "className": "",
+    "visible": true,
+    "disabled": false
+  },
+  {
+    "id": "robot05",
+    "type": "robot",
+    "z": "flow05",
+    "name": "arm",
+    "robotTag": "robot",
+    "modelPreset": "ur5e",
+    "urdfPath": "",
+    "unit": "rad",
+    "rosbridgeEnable": false,
+    "rosbridgeUrl": "ws://localhost:9090",
+    "jointStatesTopic": "/joint_states",
+    "publishTopic": "",
+    "x": 320,
+    "y": 200,
+    "wires": [
+      [
+        "debug05"
+      ]
+    ]
+  },
+  {
+    "id": "debug05",
+    "type": "debug",
+    "z": "flow05",
+    "name": "joints",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 500,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "ui_arm_05",
+    "type": "ui-robot-arm",
+    "z": "flow05",
+    "name": "view",
+    "group": "ui_group_view_05",
+    "order": 1,
+    "width": 8,
+    "height": 7,
+    "robot": "robot05",
+    "x": 320,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "ui_ctrl_05",
+    "type": "ui-robot-controller",
+    "z": "flow05",
+    "name": "pendant",
+    "group": "ui_group_ctrl_05",
+    "order": 1,
+    "width": 4,
+    "height": 7,
+    "robot": "robot05",
+    "x": 500,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "comment05",
+    "type": "comment",
+    "z": "flow05",
+    "name": "Requires @flowfuse/node-red-dashboard. Open Dashboard page Robot Arm \u2014 view + pendant share robot05.",
+    "info": "Both widgets bind to the same robot node. Standalone /robot-arm/view and /robot-arm/pendant still work.",
+    "x": 420,
+    "y": 80,
+    "wires": []
+  }
+]
