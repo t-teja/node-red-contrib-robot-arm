@@ -1,5 +1,5 @@
 {
-  "name": "node-red-dashboard-2-robot-arm",
+  "name": "node-red-contrib-robot-arm",
   "version": "0.2.0",
   "description": "Node-RED + FlowFuse Dashboard 2 robot arm: realistic UR5e URDF/STL viewer, teach pendant, optional ROS2 rosbridge. Palette: robot, controller, ui-robot-arm, ui-robot-controller.",
   "author": "Teja",
