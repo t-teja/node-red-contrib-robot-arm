@@ -7,7 +7,7 @@
 3. **`ui-robot-arm`** — Dashboard 2 3D view (iframe of `/robot-arm/view/:id`)  
 4. **`ui-robot-controller`** — Dashboard 2 pendant (iframe of `/robot-arm/pendant/:id`)
 
-npm package name is `node-red-contrib-robot-arm`. The `node-red-dashboard-2` section still describes the two Dashboard widgets.
+npm package name is `node-red-dashboard-2-robot-arm` so an existing Dashboard 2 install discovers the widgets. The GitHub repo stays `t-teja/node-red-contrib-robot-arm`.
 
 ## Data flow
 

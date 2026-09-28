@@ -1,13 +1,13 @@
-# node-red-contrib-robot-arm
+# node-red-dashboard-2-robot-arm
 
 A Node-RED robot-arm node for a **UR5e**: a 3D view of the real URDF meshes, a teach pendant, and optional ROS 2 joint feedback. On a Dashboard 2 page the arm and the pendant sit side by side. You can also drive the arm from Inject or Function nodes without a dashboard.
 
-Palette name: `node-red-contrib-robot-arm`. Guide: https://github.com/t-teja/node-red-contrib-robot-arm#readme
+Palette name: `node-red-dashboard-2-robot-arm`. The `dashboard-2` part is required so an existing Dashboard 2 install will show the arm and pendant on the page. Guide: https://github.com/t-teja/node-red-contrib-robot-arm#readme
 
 ## Add it in Node-RED
 
 1. Open the editor menu → **Manage palette** → **Install**.
-2. Search for `node-red-contrib-robot-arm` and install it.
+2. Search for `node-red-dashboard-2-robot-arm` and install it.
 3. For the on-page 3D view and pendant, also install **@flowfuse/node-red-dashboard** (Dashboard 2) if it is not already there.
 4. Restart Node-RED if the new nodes do not appear. They show up under **robotics**, and the two dashboard widgets under **dashboard**.
 
@@ -65,7 +65,7 @@ A separate **controller** node is the same pendant on its own page. Wire **contr
 
 After the package is installed, the examples are in the editor:
 
-**Menu → Import → Examples → node-red-contrib-robot-arm**
+**Menu → Import → Examples → node-red-dashboard-2-robot-arm**
 
 Import one, then deploy.
 
