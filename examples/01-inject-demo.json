@@ -8,7 +8,7 @@
   },
   {
     "id": "robot01",
-    "type": "robot",
+    "type": "robot-arm",
     "z": "flow01",
     "name": "arm",
     "robotTag": "robot",

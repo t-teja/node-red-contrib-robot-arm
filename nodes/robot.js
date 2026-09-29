@@ -112,7 +112,7 @@ module.exports = function (RED) {
       res.type('html').send(html);
     });
 
-    // Robot-bound teach pendant (used by Dashboard 2 ui-robot-controller iframe)
+    // Robot-bound teach pendant (used by Dashboard 2 ui-ur5e-controller iframe)
     express.get('/robot-arm/pendant/:id', function (req, res) {
       const id = req.params.id;
       const inst = instances.get(id);
@@ -339,7 +339,7 @@ module.exports = function (RED) {
     });
   }
 
-  RED.nodes.registerType('robot', RobotNode);
+  RED.nodes.registerType('robot-arm', RobotNode);
 };
 
 module.exports.MODEL_PRESETS = MODEL_PRESETS;

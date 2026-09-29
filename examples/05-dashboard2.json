@@ -4,7 +4,7 @@
     "type": "tab",
     "label": "05 Dashboard 2",
     "disabled": false,
-    "info": "ui-base / page / group + ui-robot-arm + ui-robot-controller bound to one robot node"
+    "info": "ui-base / page / group + ui-ur5e-arm + ui-ur5e-controller bound to one robot-arm node"
   },
   {
     "id": "ui_base_05",
@@ -69,7 +69,7 @@
   },
   {
     "id": "robot05",
-    "type": "robot",
+    "type": "robot-arm",
     "z": "flow05",
     "name": "arm",
     "robotTag": "robot",
@@ -104,7 +104,7 @@
   },
   {
     "id": "ui_arm_05",
-    "type": "ui-robot-arm",
+    "type": "ui-ur5e-arm",
     "z": "flow05",
     "name": "view",
     "group": "ui_group_view_05",
@@ -118,7 +118,7 @@
   },
   {
     "id": "ui_ctrl_05",
-    "type": "ui-robot-controller",
+    "type": "ui-ur5e-controller",
     "z": "flow05",
     "name": "pendant",
     "group": "ui_group_ctrl_05",

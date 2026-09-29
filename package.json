@@ -1,7 +1,7 @@
 {
-  "name": "node-red-dashboard-2-robot-arm",
-  "version": "0.2.0",
-  "description": "Node-RED + FlowFuse Dashboard 2 robot arm: realistic UR5e URDF/STL viewer, teach pendant, optional ROS2 rosbridge. Palette: robot, controller, ui-robot-arm, ui-robot-controller.",
+  "name": "@tteja/node-red-dashboard-2-robot-arm",
+  "version": "0.3.0",
+  "description": "Node-RED + FlowFuse Dashboard 2 robot arm: realistic UR5e URDF/STL viewer, teach pendant, optional ROS2 rosbridge. Palette: robot-arm, robot-arm-controller, ui-ur5e-arm, ui-ur5e-controller.",
   "author": "Teja",
   "license": "MIT",
   "keywords": [
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/t-teja/node-red-contrib-robot-arm.git"
+    "url": "git+https://github.com/t-teja/node-red-contrib-robot-arm.git"
   },
   "bugs": {
     "url": "https://github.com/t-teja/node-red-contrib-robot-arm/issues"
@@ -37,10 +37,10 @@
   "node-red": {
     "version": ">=3.0.0",
     "nodes": {
-      "robot": "nodes/robot.js",
-      "controller": "nodes/controller.js",
-      "ui-robot-arm": "nodes/ui-robot-arm.js",
-      "ui-robot-controller": "nodes/ui-robot-controller.js"
+      "robot-arm": "nodes/robot.js",
+      "robot-arm-controller": "nodes/controller.js",
+      "ui-ur5e-arm": "nodes/ui-robot-arm.js",
+      "ui-ur5e-controller": "nodes/ui-robot-controller.js"
     },
     "examples": {
       "Inject demo": "examples/01-inject-demo.json",
@@ -53,19 +53,19 @@
   "node-red-dashboard-2": {
     "version": "1.0.0",
     "widgets": {
-      "ui-robot-arm": {
+      "ui-ur5e-arm": {
         "output": "robot-arm-widgets.umd.js",
         "component": "UIRobotArm"
       },
-      "ui-robot-controller": {
+      "ui-ur5e-controller": {
         "output": "robot-arm-widgets.umd.js",
         "component": "UIRobotController"
       }
     }
   },
   "dependencies": {
-    "three": "^0.169.0",
-    "urdf-loader": "^0.12.3",
+    "three": "^0.186.1",
+    "urdf-loader": "^0.13.1",
     "vue": "^3.3.8",
     "vuex": "^4.1.0",
     "ws": "^8.18.0"

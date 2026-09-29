@@ -8,7 +8,7 @@
   },
   {
     "id": "ctrl02",
-    "type": "controller",
+    "type": "robot-arm-controller",
     "z": "flow02",
     "name": "pendant",
     "robotTag": "robot",
@@ -26,7 +26,7 @@
   },
   {
     "id": "robot02",
-    "type": "robot",
+    "type": "robot-arm",
     "z": "flow02",
     "name": "arm",
     "robotTag": "robot",

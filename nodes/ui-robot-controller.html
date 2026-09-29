@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  RED.nodes.registerType('ui-robot-controller', {
+  RED.nodes.registerType('ui-ur5e-controller', {
     category: RED._('@flowfuse/node-red-dashboard/ui-base:ui-base.label.category') || 'dashboard 2',
     color: '#5B8C5A',
     defaults: {
@@ -23,9 +23,9 @@
     inputs: 0,
     outputs: 0,
     icon: 'font-awesome/fa-sliders',
-    paletteLabel: 'ui-robot-controller',
+    paletteLabel: 'ui-ur5e-controller',
     label: function () {
-      return this.name || 'ui-robot-controller';
+      return this.name || 'ui-ur5e-controller';
     },
     oneditprepare: function () {
       $('#node-input-size').elementSizer({
@@ -38,8 +38,8 @@
       select.empty();
       select.append($('<option></option>').val('').text('— select robot node —'));
       RED.nodes.eachNode(function (n) {
-        if (n.type === 'robot') {
-          const label = (n.name || 'robot') + ' [' + n.id + ']';
+        if (n.type === 'robot-arm') {
+          const label = (n.name || 'robot-arm') + ' [' + n.id + ']';
           select.append($('<option></option>').val(n.id).text(label));
         }
       });
@@ -48,7 +48,7 @@
   });
 </script>
 
-<script type="text/html" data-template-name="ui-robot-controller">
+<script type="text/html" data-template-name="ui-ur5e-controller">
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
@@ -74,8 +74,8 @@
   </div>
 </script>
 
-<script type="text/html" data-help-name="ui-robot-controller">
-  <p>Dashboard 2 teach-pendant widget bound to a <b>robot</b> node. Soft Freeze is UI-only — not SIL.</p>
+<script type="text/html" data-help-name="ui-ur5e-controller">
+  <p>Dashboard 2 teach-pendant widget bound to a <b>robot-arm</b> node. Soft Freeze is UI-only — not SIL.</p>
   <h3>More</h3>
   <p><a href="https://github.com/t-teja/node-red-contrib-robot-arm#readme" target="_blank">Usage guide on GitHub</a></p>
 </script>

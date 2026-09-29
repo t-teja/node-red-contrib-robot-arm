@@ -2,12 +2,12 @@
 
 ## Palette nodes
 
-1. **`robot`** — arm model, normalize, rosbridge, HTTP view + pendant API  
-2. **`controller`** — standalone teach pendant (HTTP) for non-Dashboard flows  
-3. **`ui-robot-arm`** — Dashboard 2 3D view (iframe of `/robot-arm/view/:id`)  
-4. **`ui-robot-controller`** — Dashboard 2 pendant (iframe of `/robot-arm/pendant/:id`)
+1. **`robot-arm`** — arm model, normalize, rosbridge, HTTP view + pendant API  
+2. **`robot-arm-controller`** — standalone teach pendant (HTTP) for non-Dashboard flows  
+3. **`ui-ur5e-arm`** — Dashboard 2 3D view (iframe of `/robot-arm/view/:id`)  
+4. **`ui-ur5e-controller`** — Dashboard 2 pendant (iframe of `/robot-arm/pendant/:id`)
 
-npm package name is `node-red-dashboard-2-robot-arm` so an existing Dashboard 2 install discovers the widgets. The GitHub repo stays `t-teja/node-red-contrib-robot-arm`.
+npm package name is `@tteja/node-red-dashboard-2-robot-arm`. The scope satisfies the Flow Library naming rule for packages published after 2021, and the name still contains `node-red-dashboard-2-` so an existing Dashboard 2 install discovers the widgets. The GitHub repo stays `t-teja/node-red-contrib-robot-arm`.
 
 ## Data flow
 
@@ -16,7 +16,7 @@ npm package name is `node-red-dashboard-2-robot-arm` so an existing Dashboard 2 
             │
             ▼
      ┌──────────────┐     SSE/HTTP      ┌─────────────┐
-     │    robot     │──────────────────▶│  viewer.js  │
+     │  robot-arm   │──────────────────▶│  viewer.js  │
      │ RobotRuntime │                   │  URDF+STL   │
      │ RosbridgeClient                  └─────────────┘
      └──────▲───────┘
@@ -44,7 +44,7 @@ HTTP serves nested paths: `/robot-arm/models/:preset/*` (e.g. `meshes/base.stl`)
 
 ## Dashboard 2
 
-Built UMD: `resources/robot-arm-widgets.umd.js` (committed). Widgets bind to a `robot` node id via config dropdown.
+Built UMD: `resources/robot-arm-widgets.umd.js` (committed). Widgets bind to a `robot-arm` node id via config dropdown.
 
 ## Safety
 

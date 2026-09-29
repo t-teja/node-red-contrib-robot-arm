@@ -1,37 +1,37 @@
-# node-red-dashboard-2-robot-arm
+# @tteja/node-red-dashboard-2-robot-arm
 
 A Node-RED robot-arm node for a **UR5e**: a 3D view of the real URDF meshes, a teach pendant, and optional ROS 2 joint feedback. On a Dashboard 2 page the arm and the pendant sit side by side. You can also drive the arm from Inject or Function nodes without a dashboard.
 
-Palette name: `node-red-dashboard-2-robot-arm`. The `dashboard-2` part is required so an existing Dashboard 2 install will show the arm and pendant on the page. Guide: https://github.com/t-teja/node-red-contrib-robot-arm#readme
+Palette name: `@tteja/node-red-dashboard-2-robot-arm`. The `@tteja` scope is the name the Flow Library asks for on new packages. The `dashboard-2` part is required so an existing Dashboard 2 install will show the arm and pendant on the page. Guide: https://github.com/t-teja/node-red-contrib-robot-arm#readme
 
 ## Add it in Node-RED
 
 1. Open the editor menu → **Manage palette** → **Install**.
-2. Search for `node-red-dashboard-2-robot-arm` and install it.
+2. Search for `@tteja/node-red-dashboard-2-robot-arm` and install it.
 3. For the on-page 3D view and pendant, also install **@flowfuse/node-red-dashboard** (Dashboard 2) if it is not already there.
 4. Restart Node-RED if the new nodes do not appear. They show up under **robotics**, and the two dashboard widgets under **dashboard**.
 
-The `robot` and `controller` nodes work without Dashboard 2. The `ui-robot-arm` and `ui-robot-controller` widgets need it.
+The `robot-arm` and `robot-arm-controller` nodes work without Dashboard 2. The `ui-ur5e-arm` and `ui-ur5e-controller` widgets need it.
 
 ## The four nodes
 
 | Node | What you use it for |
 |------|---------------------|
-| **robot** | The arm. Holds the UR5e model, accepts joint commands, and publishes the current joint state. |
-| **controller** | A teach pendant on its own page. Wire its output into **robot**. |
-| **ui-robot-arm** | Dashboard 2 widget. Shows the 3D arm for a **robot** node you pick. |
-| **ui-robot-controller** | Dashboard 2 widget. Pendant for that same **robot** node. No extra wire is required. |
+| **robot-arm** | The arm. Holds the UR5e model, accepts joint commands, and publishes the current joint state. |
+| **robot-arm-controller** | A teach pendant on its own page. Wire its output into **robot-arm**. |
+| **ui-ur5e-arm** | Dashboard 2 widget. Shows the 3D arm for a **robot-arm** node you pick. |
+| **ui-ur5e-controller** | Dashboard 2 widget. Pendant for that same **robot-arm** node. No extra wire is required. |
 
 ```
  Inject / Function / rosbridge          Dashboard 2 page
-            │                           ┌─ ui-robot-arm ────────┐
+            │                           ┌─ ui-ur5e-arm ────────┐
             ▼                           │       3D view         │
-     ┌──────────────┐                   ├─ ui-robot-controller ─┤
-     │    robot     │◀── pendant ───────│    joint sliders      │
+     ┌──────────────┐                   ├─ ui-ur5e-controller ─┤
+     │  robot-arm   │◀── pendant ───────│    joint sliders      │
      └──────────────┘                   └───────────────────────┘
 ```
 
-On **robot**, choose the model:
+On **robot-arm**, choose the model:
 
 | Preset | What you get |
 |--------|----------------|
@@ -49,37 +49,37 @@ This is the layout in example **05 Dashboard 2**.
 
 The base stays in the middle of the 3D panel, and the zoom fits the panel. You can orbit around the base. The pendant sliders, **Home**, and **Freeze** move that same arm.
 
-If you already have a dashboard, you do not have to import the whole example. Add a **robot** node, then add **ui-robot-arm** and **ui-robot-controller** to a page and, in each widget, select that robot node.
+If you already have a dashboard, you do not have to import the whole example. Add a **robot-arm** node, then add **ui-ur5e-arm** and **ui-ur5e-controller** to a page and, in each widget, select that robot-arm node.
 
 **Freeze** is a soft stop in the UI. It is not a hardware emergency stop. See [Safety](#safety).
 
 ## Use it from a flow
 
-Drop a **robot** node on a tab and deploy. Anything you send to its input becomes the next joint command, and the output is the joint state after that command.
+Drop a **robot-arm** node on a tab and deploy. Anything you send to its input becomes the next joint command, and the output is the joint state after that command.
 
 The node status shows a 3D view path, `/robot-arm/view/<robot-node-id>`. Open that on the Node-RED host to see the arm without Dashboard 2.
 
-A separate **controller** node is the same pendant on its own page. Wire **controller → robot**, deploy, and open the controller URL shown on that node (`/robot-arm/controller/<id>`). Example **02** is this wiring.
+A separate **robot-arm-controller** node is the same pendant on its own page. Wire **robot-arm-controller → robot-arm**, deploy, and open the controller URL shown on that node (`/robot-arm/controller/<id>`). Example **02** is this wiring.
 
 ## Examples
 
 After the package is installed, the examples are in the editor:
 
-**Menu → Import → Examples → node-red-dashboard-2-robot-arm**
+**Menu → Import → Examples → @tteja/node-red-dashboard-2-robot-arm**
 
 Import one, then deploy.
 
 | Example | What to do with it |
 |---------|-------------------|
-| **01 Inject demo** | Three Inject nodes: Home, Reach, and Wave. Click one and the arm moves. A debug node shows the joint state coming out of **robot**. |
-| **02 Controller to robot** | Pendant wired into the arm. Open the controller URL on the **controller** node and move the sliders. |
-| **03 Rosbridge live** | **robot** with rosbridge turned on, subscribed to `/joint_states`. Use this when a ROS 2 robot or simulator is publishing joint states. |
+| **01 Inject demo** | Three Inject nodes: Home, Reach, and Wave. Click one and the arm moves. A debug node shows the joint state coming out of **robot-arm**. |
+| **02 Controller to robot** | Pendant wired into the arm. Open the controller URL on the **robot-arm-controller** node and move the sliders. |
+| **03 Rosbridge live** | **robot-arm** with rosbridge turned on, subscribed to `/joint_states`. Use this when a ROS 2 robot or simulator is publishing joint states. |
 | **04 Controller and ROS 2** | Pendant and rosbridge together. While the pendant is armed, its commands win for about 2 seconds over incoming `/joint_states`. Disarm the pendant to let ROS drive the view. |
-| **05 Dashboard 2** | A Dashboard page named **Robot Arm** with the 3D view and the pendant bound to one **robot** node. Start here if you want the arm on a dashboard. |
+| **05 Dashboard 2** | A Dashboard page named **Robot Arm** with the 3D view and the pendant bound to one **robot-arm** node. Start here if you want the arm on a dashboard. |
 
 ## Messages
 
-Send any of these on the **robot** input. The output is always the canonical object below.
+Send any of these on the **robot-arm** input. The output is always the canonical object below.
 
 Canonical command and state:
 
@@ -121,7 +121,7 @@ Optional. On the robot PC or simulator:
 ros2 launch rosbridge_server rosbridge_websocket_launch.xml
 ```
 
-On the **robot** node, enable rosbridge and set:
+On the **robot-arm** node, enable rosbridge and set:
 
 - URL: `ws://<robot-pc>:9090`
 - Subscribe topic: `/joint_states` (`sensor_msgs/JointState`)

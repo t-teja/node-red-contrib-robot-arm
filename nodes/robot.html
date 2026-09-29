@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  RED.nodes.registerType('robot', {
+  RED.nodes.registerType('robot-arm', {
     category: 'robotics',
     color: '#3D7EA6',
     defaults: {
@@ -17,12 +17,12 @@
     outputs: 1,
     icon: 'font-awesome/fa-android',
     label: function () {
-      return this.name || 'robot';
+      return this.name || 'robot-arm';
     },
     labelStyle: function () {
       return this.name ? 'node_label_italic' : '';
     },
-    paletteLabel: 'robot',
+    paletteLabel: 'robot-arm',
     oneditprepare: function () {
       function toggleRos() {
         var on = $('#node-input-rosbridgeEnable').is(':checked');
@@ -34,7 +34,7 @@
   });
 </script>
 
-<script type="text/html" data-template-name="robot">
+<script type="text/html" data-template-name="robot-arm">
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
@@ -82,11 +82,11 @@
   <div class="form-tips">
     After deploy, open the 3D view URL on the node status
     (<code>/robot-arm/view/&lt;node-id&gt;</code>). For Dashboard 2, place
-    <b>ui-robot-arm</b> + <b>ui-robot-controller</b> on the same page and select this robot node.
+    <b>ui-ur5e-arm</b> + <b>ui-ur5e-controller</b> on the same page and select this robot-arm node.
   </div>
 </script>
 
-<script type="text/html" data-help-name="robot">
+<script type="text/html" data-help-name="robot-arm">
   <p>Robot arm node: loads a UR5e URDF with STL meshes, shows a Three.js 3D view, accepts joint commands on the input, and optionally mirrors ROS2 <code>JointState</code> via rosbridge.</p>
   <h3>Inputs</h3>
   <dl class="message-properties">
@@ -99,7 +99,7 @@
     <dd>Current joint state: <code>{ robot, joints, unit, source, ts }</code>.</dd>
   </dl>
   <h3>3D view</h3>
-  <p>Self-contained viewer at <code>/robot-arm/view/&lt;id&gt;</code>. Dashboard 2 users can embed via <b>ui-robot-arm</b>.</p>
+  <p>Self-contained viewer at <code>/robot-arm/view/&lt;id&gt;</code>. Dashboard 2 users can embed via <b>ui-ur5e-arm</b>.</p>
   <h3>Priority</h3>
   <p>Last-writer wins with source tags. Pendant/controller with manual armed briefly preferred over rosbridge (~2 s).</p>
   <h3>Safety</h3>

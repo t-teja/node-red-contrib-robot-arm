@@ -8,7 +8,7 @@
   },
   {
     "id": "robot03",
-    "type": "robot",
+    "type": "robot-arm",
     "z": "flow03",
     "name": "arm-ros",
     "robotTag": "robot",

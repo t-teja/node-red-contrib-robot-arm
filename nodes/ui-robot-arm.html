@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  RED.nodes.registerType('ui-robot-arm', {
+  RED.nodes.registerType('ui-ur5e-arm', {
     category: RED._('@flowfuse/node-red-dashboard/ui-base:ui-base.label.category') || 'dashboard 2',
     color: '#3D7EA6',
     defaults: {
@@ -23,9 +23,9 @@
     inputs: 0,
     outputs: 0,
     icon: 'font-awesome/fa-cube',
-    paletteLabel: 'ui-robot-arm',
+    paletteLabel: 'ui-ur5e-arm',
     label: function () {
-      return this.name || 'ui-robot-arm';
+      return this.name || 'ui-ur5e-arm';
     },
     oneditprepare: function () {
       $('#node-input-size').elementSizer({
@@ -38,8 +38,8 @@
       select.empty();
       select.append($('<option></option>').val('').text('— select robot node —'));
       RED.nodes.eachNode(function (n) {
-        if (n.type === 'robot') {
-          const label = (n.name || 'robot') + ' [' + n.id + ']';
+        if (n.type === 'robot-arm') {
+          const label = (n.name || 'robot-arm') + ' [' + n.id + ']';
           select.append($('<option></option>').val(n.id).text(label));
         }
       });
@@ -48,7 +48,7 @@
   });
 </script>
 
-<script type="text/html" data-template-name="ui-robot-arm">
+<script type="text/html" data-template-name="ui-ur5e-arm">
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
@@ -70,12 +70,12 @@
   <div class="form-tips">
     Embeds the 3D URDF viewer for the selected <b>robot</b> node (same-origin iframe of
     <code>/robot-arm/view/&lt;id&gt;</code>). Place on the same Dashboard 2 page as
-    <b>ui-robot-controller</b>.
+    <b>ui-ur5e-controller</b>.
   </div>
 </script>
 
-<script type="text/html" data-help-name="ui-robot-arm">
-  <p>Dashboard 2 widget: 3D UR5e viewer bound to a <b>robot</b> palette node.</p>
+<script type="text/html" data-help-name="ui-ur5e-arm">
+  <p>Dashboard 2 widget: 3D UR5e viewer bound to a <b>robot-arm</b> palette node.</p>
   <p>Requires <code>@flowfuse/node-red-dashboard</code>. Standalone HTTP view still works without Dashboard.</p>
   <h3>More</h3>
   <p><a href="https://github.com/t-teja/node-red-contrib-robot-arm#readme" target="_blank">Usage guide on GitHub</a></p>

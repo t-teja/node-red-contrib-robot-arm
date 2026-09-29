@@ -233,5 +233,5 @@ module.exports = function (RED) {
     });
   }
 
-  RED.nodes.registerType('controller', ControllerNode);
+  RED.nodes.registerType('robot-arm-controller', ControllerNode);
 };

@@ -17,9 +17,9 @@ module.exports = function (RED) {
     if (group) {
       group.register(node, config, evts);
     } else {
-      node.error('No group configured — add ui-robot-controller to a Dashboard 2 ui-group');
+      node.error('No group configured — add ui-ur5e-controller to a Dashboard 2 ui-group');
     }
   }
 
-  RED.nodes.registerType('ui-robot-controller', UIRobotControllerNode);
+  RED.nodes.registerType('ui-ur5e-controller', UIRobotControllerNode);
 };
